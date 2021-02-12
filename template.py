@@ -37,6 +37,16 @@ def find_templ(img, img_tpl):
     return res
 
 
+# будуємо рамки для співпадінь
+def draw_frames(img, coord):
+    res = img.copy()
+    for c in coord:
+        top_left = (c[0], c[1])
+        bottom_right = (c[0] + c[2], c[1] + c[3])
+        cv2.rectangle(res, top_left, bottom_right, color=(0, 0, 255), thickness=5)
+    return res
+
+
 def main():
     f = "data/juice.jpg"
     bu = "data/juices/"
@@ -56,6 +66,7 @@ def main():
         img_tpl = cv2.imread(t, cv2.IMREAD_GRAYSCALE)
         coord = find_templ(img, img_tpl)
         img_res = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+        img_res = draw_frames(img_res, coord)
         tn = os.path.splitext(os.path.basename(t))[0]
         cv2.imwrite("results/matches/res-%s.jpg" % tn, img_res)
         for c in coord:
